@@ -1,79 +1,97 @@
-<h1 align="center">✨ Full-Stack Interview Platform ✨</h1>
+# Aurora Interview Studio
 
-![Demo App](/frontend/public/screenshot-for-readme.png)
+Aurora Interview Studio is a full-stack technical interview platform with real-time coding, video collaboration, session history, and problem practice.
 
-✨ Highlights:
+## Features
 
-- 🧑‍💻 VSCode-Powered Code Editor
-- 🔐 Authentication via Clerk
-- 🎥 1-on-1 Video Interview Rooms
-- 🧭 Dashboard with Live Stats
-- 🔊 Mic & Camera Toggle, Screen Sharing & Recording
-- 💬 Real-time Chat Messaging
-- ⚙️ Secure Code Execution in Isolated Environment
-- 🎯 Auto Feedback — Success / Fail based on test cases
-- 🎉 Confetti on Success + Notifications on Fail
-- 🧩 Practice Problems Page (solo coding mode)
-- 🔒 Room Locking — allows only 2 participants
-- 🧠 Background Jobs with Inngest (async tasks)
-- 🧰 REST API with Node.js & Express
-- ⚡ Data Fetching & Caching via TanStack Query
-- 🤖 CodeRabbit for PR Analysis & Code Optimization
-- 🧑‍💻 Git & GitHub Workflow (branches, PRs, merges)
-- 🚀 Deployment on Sevalla (free-tier friendly)
+- Real-time collaborative coding sessions
+- 1:1 video interview rooms with Stream
+- Auth and user management with Clerk
+- Session lifecycle APIs with Node + Express + MongoDB
+- Problem practice flow with live code execution
 
----
+## Local Setup
 
-## 🧪 .env Setup
-
-### Backend (`/backend`)
+1) Install dependencies
 
 ```bash
-PORT=3000
-NODE_ENV=development
-
-DB_URL=your_mongodb_connection_url
-
-INNGEST_EVENT_KEY=your_inngest_event_key
-INNGEST_SIGNING_KEY=your_inngest_signing_key
-
-STREAM_API_KEY=your_stream_api_key
-STREAM_API_SECRET=your_stream_api_secret
-
-CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
-CLERK_SECRET_KEY=your_clerk_secret_key
-
-CLIENT_URL=http://localhost:5173
+npm install --prefix backend
+npm install --prefix frontend
 ```
 
-### Frontend (`/frontend`)
+2) Configure environment files
 
 ```bash
-VITE_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
-
-VITE_API_URL=http://localhost:3000/api
-
-VITE_STREAM_API_KEY=your_stream_api_key
+cp backend/.env.example backend/.env
+cp frontend/.env.example frontend/.env
 ```
 
----
-
-## 🔧 Run the Backend
+3) Run backend
 
 ```bash
-
-cd backend
-npm install
-npm run dev
+npm run dev --prefix backend
 ```
 
----
+4) Run frontend (new terminal)
 
-## 🔧 Run the Frontend
+```bash
+npm run dev --prefix frontend
+```
 
+## Production Build (without Docker)
+
+```bash
+npm run build
+npm run start
 ```
-bash
-cd frontend
-npm install
-npm run dev
+
+This builds frontend assets and starts the backend server that serves `frontend/dist` in production mode.
+
+## Docker Deployment
+
+1) Create environment file:
+
+```bash
+cp backend/.env.example backend/.env
 ```
+
+2) Build and run:
+
+```bash
+docker compose up --build -d
+```
+
+3) Verify:
+
+```bash
+curl http://localhost:3000/health
+```
+
+## Environment Variables
+
+### Backend (`backend/.env`)
+
+- `PORT` default `3000`
+- `NODE_ENV` (`development` or `production`)
+- `DB_URL`
+- `INNGEST_EVENT_KEY`
+- `INNGEST_SIGNING_KEY`
+- `STREAM_API_KEY`
+- `STREAM_API_SECRET`
+- `CLERK_PUBLISHABLE_KEY`
+- `CLERK_SECRET_KEY`
+- `CLIENT_URL` (supports comma-separated origins)
+
+### Frontend (`frontend/.env`)
+
+- `VITE_CLERK_PUBLISHABLE_KEY`
+- `VITE_API_URL`
+- `VITE_STREAM_API_KEY`
+
+## Git Workflow (genuine)
+
+Use meaningful, feature-based branches and commits:
+
+- Branch names like `feature/session-filters`, `fix/cors-origin-check`, `docs/deployment-guide`
+- Commits that describe real changes and pass build checks
+- Open PRs for review instead of creating artificial branch/commit noise
