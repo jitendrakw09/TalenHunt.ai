@@ -7,12 +7,19 @@ import { BrowserRouter } from "react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ErrorBoundary from "./components/ErrorBoundary";
 
-// Import your Publishable Key
-const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+const requiredFrontendEnv = ["VITE_CLERK_PUBLISHABLE_KEY", "VITE_STREAM_API_KEY"];
+const missingFrontendEnv = requiredFrontendEnv.filter((envName) => {
+  const value = import.meta.env[envName];
+  return !value || String(value).trim().startsWith("your_");
+});
 
-if (!PUBLISHABLE_KEY) {
-  throw new Error("Missing Clerk Publishable Key");
+if (missingFrontendEnv.length > 0) {
+  throw new Error(
+    `Missing or invalid frontend environment variables: ${missingFrontendEnv.join(", ")}. Update frontend/.env before running the app.`
+  );
 }
+
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 const queryClient = new QueryClient();
 
