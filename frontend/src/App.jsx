@@ -1,4 +1,5 @@
 import { useUser } from "@clerk/clerk-react";
+import { useEffect, useState } from "react";
 import { Navigate, Route, Routes } from "react-router";
 import HomePage from "./pages/HomePage";
 
@@ -11,9 +12,45 @@ import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
   const { isSignedIn, isLoaded } = useUser();
+  const [showClerkTimeout, setShowClerkTimeout] = useState(false);
 
-  // this will get rid of the flickering effect
-  if (!isLoaded) return null;
+  useEffect(() => {
+    if (isLoaded) {
+      setShowClerkTimeout(false);
+      return;
+    }
+
+    const timeoutId = setTimeout(() => {
+      setShowClerkTimeout(true);
+    }, 6000);
+
+    return () => clearTimeout(timeoutId);
+  }, [isLoaded]);
+
+  if (!isLoaded) {
+    return (
+      <main className="aurora-shell flex items-center justify-center px-4">
+        <section className="aurora-panel w-full max-w-2xl p-8 text-center">
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-primary">
+            Initializing
+          </p>
+          <h1 className="mt-2 text-2xl font-extrabold">Loading authentication…</h1>
+          <p className="mt-3 text-base-content/70">
+            Please wait while the app connects to Clerk.
+          </p>
+
+          {showClerkTimeout && (
+            <div className="mt-6 rounded-xl border border-warning/30 bg-warning/10 p-4 text-left text-sm text-base-content/80">
+              <p className="font-semibold">Still loading?</p>
+              <p className="mt-1">
+                Verify your Clerk domain and publishable key settings for this deployment URL.
+              </p>
+            </div>
+          )}
+        </section>
+      </main>
+    );
+  }
 
   return (
     <>
