@@ -63,6 +63,18 @@ if (ENV.NODE_ENV === "production") {
   });
 }
 
+app.use((error, req, res, next) => {
+  if (res.headersSent) return next(error);
+
+  const statusCode = error.statusCode || 500;
+  const message =
+    ENV.NODE_ENV === "production" && statusCode === 500
+      ? "Internal Server Error"
+      : error.message || "Internal Server Error";
+
+  res.status(statusCode).json({ error: message });
+});
+
 const startServer = async () => {
   try {
     await connectDB();
