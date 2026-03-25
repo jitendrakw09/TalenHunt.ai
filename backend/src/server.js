@@ -19,8 +19,16 @@ const allowedOrigins = ENV.CLIENT_URL.split(",")
   .map((origin) => origin.trim())
   .filter(Boolean);
 
+app.disable("x-powered-by");
+
 // middleware
 app.use(express.json());
+app.use((req, res, next) => {
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "DENY");
+  res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+  next();
+});
 // credentials:true meaning?? => server allows a browser to include cookies on request
 app.use(
   cors({
