@@ -38,7 +38,13 @@ app.use("/api/chat", chatRoutes);
 app.use("/api/sessions", sessionRoutes);
 
 app.get("/health", (req, res) => {
-  res.status(200).json({ msg: "api is up and running" });
+  res.status(200).json({
+    status: "ok",
+    service: "aurora-interview-studio-api",
+    environment: ENV.NODE_ENV,
+    uptimeSeconds: Math.floor(process.uptime()),
+    timestamp: new Date().toISOString(),
+  });
 });
 
 // make our app ready for deployment
