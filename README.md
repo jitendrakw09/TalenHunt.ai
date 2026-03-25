@@ -72,6 +72,33 @@ docker compose up --build -d
 curl http://localhost:3000/health
 ```
 
+## Render Deployment
+
+Use the included [render.yaml](render.yaml) blueprint.
+
+### Build/Run
+
+- Build Command: `npm run build`
+- Start Command: `npm run start`
+- Health Check: `/health`
+
+### Required Render Environment Variables
+
+- `NODE_ENV=production`
+- `PORT=3000`
+- `DB_URL` (MongoDB Atlas URI)
+- `CLIENT_URL=https://<your-render-domain>.onrender.com`
+- `CLERK_SECRET_KEY`
+- `CLERK_PUBLISHABLE_KEY`
+- `VITE_CLERK_PUBLISHABLE_KEY`
+- `STREAM_API_KEY`
+- `STREAM_API_SECRET`
+- `VITE_STREAM_API_KEY`
+- `INNGEST_EVENT_KEY`
+- `INNGEST_SIGNING_KEY`
+
+`VITE_API_URL` is optional in production because frontend and API are served from the same origin.
+
 ## Environment Variables
 
 ### Backend (`backend/.env`)
@@ -90,7 +117,7 @@ curl http://localhost:3000/health
 ### Frontend (`frontend/.env`)
 
 - `VITE_CLERK_PUBLISHABLE_KEY`
-- `VITE_API_URL`
+- `VITE_API_URL` (optional in production)
 - `VITE_STREAM_API_KEY`
 
 ## Git Workflow (genuine)
